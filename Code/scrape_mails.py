@@ -36,21 +36,27 @@ for path in file_paths:
         if len(mail)>1:
             replies.append([r,reply])
             for m in mail[1:]:
-                originals.append([path, r, reduce_mail(m.strip())])
+                originals.append([path, r, reduce_mail(m.strip().replace("\n>",""))])
             r+=1
         request_emails+=len(mail)-1
     print("[+] Processed",c,"out of",len(file_paths)," ")
     sys.stdout.write("\033[F");
     c+=1
 
-print("\n[=] Writing",request_emails,"results to", sys.argv[2],"and",sys.argv[2].replace(".csv",".replies.csv"))
-with open(sys.argv[2].replace(".csv",".mails.csv"),"w") as o:
+print("\n[=] Writing",request_emails,"results to", sys.argv[2])
+with open(sys.argv[2],"w") as o:
     o_writer = csv.writer(o)
-    o_writer.writerow(["path","msg_id","mail"])
+    o_writer.writerow(["path","msg_id","message","needs_reply"])
     for i in originals:
+        i.append(1)
         o_writer.writerow(i)
-with open(sys.argv[2].replace(".csv",".replies.csv"),"w") as o:
-    o_writer = csv.writer(o)
-    o_writer.writerow(["msg_id","mail"])
     for i in replies:
+        i.append(0)
+        i = [-1]+i
         o_writer.writerow(i)
+# with open(sys.argv[2].replace(".csv",".replies.csv"),"w") as o:
+#     o_writer = csv.writer(o)
+#     o_writer.writerow(["msg_id","message","needs_reply"])
+#     for i in replies:
+#         i.append(0)
+#         o_writer.writerow(i)
