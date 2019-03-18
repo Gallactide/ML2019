@@ -30,18 +30,21 @@ with open(sys.argv[1], "r") as f:
 c = 1
 r = 0
 for path in file_paths:
-    with open(path, "r", errors="ignore") as file:
-        mail = file.read().split("-----Original Message-----")
-        reply = reduce_mail(mail[0])
-        if len(mail)>1:
-            replies.append([r,reply])
-            for m in mail[1:]:
-                originals.append([path, r, reduce_mail(m.strip().replace("\n>",""))])
-            r+=1
-        request_emails+=len(mail)-1
-    print("[+] Processed",c,"out of",len(file_paths)," ")
-    sys.stdout.write("\033[F");
-    c+=1
+    try:
+        with open(path, "r", errors="ignore") as file:
+            mail = file.read().split("-----Original Message-----")
+            reply = reduce_mail(mail[0])
+            if len(mail)>1:
+                replies.append([r,reply])
+                for m in mail[1:]:
+                    originals.append([path, r, reduce_mail(m.strip().replace("\n>",""))])
+                r+=1
+            request_emails+=len(mail)-1
+        print("[+] Processing",c,"out of",len(file_paths),"mails ")
+        sys.stdout.write("\033[F");
+        c+=1
+    except:
+        pass
 
 print("\n[=] Writing",request_emails,"results to", sys.argv[2])
 with open(sys.argv[2],"w") as o:

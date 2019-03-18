@@ -9,6 +9,12 @@ def classifier_svc(data, labels):
     m = svm.SVC(gamma="scale")
     return m.fit(data, labels)
 
+@print_state("[T] Training NaiveBayes Model...")
+def classifier_nb(data, labels):
+    from sklearn.naive_bayes import GaussianNB
+    m = GaussianNB()
+    return m.fit(data, labels)
+
 @print_state("[T] Training LogisticRegression Model...")
 def classifier_lr(data, labels):
     from sklearn.linear_model import LogisticRegression

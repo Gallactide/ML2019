@@ -1,6 +1,10 @@
 import sys, pandas
-import spacy
-stopwords = list(spacy.load("en").Defaults.stop_words)
+try:
+    import spacy
+    stopwords = list(spacy.load("en").Defaults.stop_words)
+except:
+    print("[!] Couldn't import spaCy, disabling stopword removal.")
+    stopwords = []
 from _utilities import *
 
 # Mail Parsing
